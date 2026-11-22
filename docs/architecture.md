@@ -45,13 +45,13 @@ flowchart LR
 
 Registre seu plano aqui antes de editar o código.
 
-- Decisão da camada de apresentação:
-- Decisão da camada de lógica:
-- Decisão da camada de dados:
-- Abordagem para registro de atividades:
-- Abordagem para gerenciamento de equipes:
-- Abordagem para o placar:
-- Abordagem para sugestões de treino:
+- Decisão da camada de apresentação: manter React 19 com Vite e React Router; cada componente (`Activities`, `Teams`, `Leaderboard`, `Workouts`) carrega dados somente por `getJson` de `src/api/client.ts`, sem `fetch` direto, e exibe estados de carregamento, vazio, sucesso e erro.
+- Decisão da camada de lógica: implementar as regras de validação e cálculo em `src/services/octofitService.ts`; as rotas em `src/routes/api.ts` apenas delegam ao serviço e retornam os códigos de status definidos pelo contrato.
+- Decisão da camada de dados: definir em `src/models` os campos obrigatórios com `required: true` (`User`, `Team`, `Activity`, `Workout`) e tornar `src/scripts/seed.ts` idempotente com `upsert`, sem apagar registros não relacionados.
+- Abordagem para registro de atividades: validar `userId` e `teamId` como ObjectId existentes antes de salvar, responder 4xx para entradas inválidas e calcular `points` e `occurredAt` no serviço.
+- Abordagem para gerenciamento de equipes: validar o nome obrigatório com resposta `400`, persistir `name` e `mascot` enviados e listar as equipes pelo modelo `Team`.
+- Abordagem para o placar: agregar os `points` das atividades por equipe com MongoDB, ordenar do maior para o menor total e numerar `rank` a partir de 1.
+- Abordagem para sugestões de treino: localizar a pessoa pelo e-mail seed, derivar o `focus` da meta ou da atividade recente e preencher `reason` com a justificativa; e-mail desconhecido retorna `404`.
 
 ## Plano de testes
 
@@ -62,3 +62,9 @@ Registre os comandos executados e o significado de cada falha.
 - Testes do frontend: `npm test --prefix octofit-tracker/frontend`
 - Compilação do backend: `npm run build --prefix octofit-tracker/backend`
 - Compilação do frontend: `npm run build --prefix octofit-tracker/frontend`
+
+### Linha de base (antes de implementar)
+
+- `npm run test:data --prefix octofit-tracker/backend`: 4 falhas e 1 aprovado. As falhas indicam que os modelos ainda não declaram validações obrigatórias nem o seed idempotente.
+- `npm run test:api --prefix octofit-tracker/backend`: 4 falhas. Os serviços ainda são placeholders (`501` ao criar, placar vazio e sugestões sem `reason`).
+- `npm test --prefix octofit-tracker/frontend`: 15 falhas. As telas ainda exibem "Implementação pendente" e não consomem a API.
