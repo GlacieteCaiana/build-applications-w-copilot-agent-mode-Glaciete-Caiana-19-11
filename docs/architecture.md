@@ -68,3 +68,11 @@ Registre os comandos executados e o significado de cada falha.
 - `npm run test:data --prefix octofit-tracker/backend`: 4 falhas e 1 aprovado. As falhas indicam que os modelos ainda não declaram validações obrigatórias nem o seed idempotente.
 - `npm run test:api --prefix octofit-tracker/backend`: 4 falhas. Os serviços ainda são placeholders (`501` ao criar, placar vazio e sugestões sem `reason`).
 - `npm test --prefix octofit-tracker/frontend`: 15 falhas. As telas ainda exibem "Implementação pendente" e não consomem a API.
+
+### Resultado final
+
+- `npm run test:data --prefix octofit-tracker/backend`: 5 aprovados.
+- `npm run test:api --prefix octofit-tracker/backend`: 4 aprovados.
+- `npm test --prefix octofit-tracker/frontend`: 15 aprovados.
+- `npm run build --prefix octofit-tracker/backend` e `npm run build --prefix octofit-tracker/frontend`: sem erros.
+- Graders `step1-architecture` a `step5-final`: aprovados localmente.
